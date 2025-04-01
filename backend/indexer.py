@@ -12,9 +12,8 @@ INDEX_FILE = os.path.join(DATA_DIR, "index.json")
 
 
 def tokenize(text):
-    """Convert text into list of lowercase words."""
-    tokens = text.lower().split()
-    return [word for word in tokens if word.isalnum()]
+    """Tokenize text into clean lowercase words."""
+    return re.findall(r'\b\w+\b', text.lower())
 
 
 def build_index():
