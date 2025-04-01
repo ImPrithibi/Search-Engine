@@ -19,6 +19,9 @@ def search_query(query):
     """Search for query and return matching URLs with basic ranking."""
     index = load_index()
     keywords = query.lower().split()
+    if len(keywords) == 1:
+    # Add fuzzy matching
+        keywords.append(keywords[0].replace('-', ' '))
 
     scores = {}
 

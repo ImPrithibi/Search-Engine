@@ -59,7 +59,7 @@ def start_crawling(keyword=None):
 
     count = 0
 
-    while to_crawl and count < MAX_PAGES:
+    while to_crawl and count < 10:  # Hard limit to 10 pages
         url = to_crawl.pop(0)
         if url in crawled:
             continue
@@ -70,7 +70,7 @@ def start_crawling(keyword=None):
             "url": url,
             "content": text
         }
-        to_crawl.extend(links)
+        # Do NOT extend to_crawl → we want only the initial search result pages
         count += 1
 
     os.makedirs(DATA_DIR, exist_ok=True)
