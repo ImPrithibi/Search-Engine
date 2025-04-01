@@ -20,6 +20,13 @@ def search_endpoint():
         return jsonify({"error": "No query provided"}), 400
 
     results = search.search_query(query)
+
+    if not results:
+        print(f"No results found for '{query}'. Crawling now...")
+        crawler.start_crawling(keyword=query)
+        indexer.build_index()
+        results = search.search_query(query)
+
     return jsonify({"query": query, "results": results})
 
 # Crawl endpoint
