@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import search 
 import crawler
+import indexer
 
 app = Flask(__name__)
 CORS(app)
@@ -32,3 +33,10 @@ def crawl_endpoint():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
+
+# Trigger crawling and indexing
+@app.route('/index')
+
+def index_endpoint():
+    status = indexer.build_index()
+    return jsonify({"status": status})
