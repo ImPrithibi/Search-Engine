@@ -23,19 +23,21 @@ def search_endpoint():
 
     if not results:
         print(f"No results found for '{query}'. Crawling now...")
-        status = crawler.start_crawling(keyword=query)
+        status, crawled_urls = crawler.start_crawling(keyword=query)
         indexer.build_index()
         results = search.search_query(query)
 
         return jsonify({
             "query": query,
             "status": f"Crawled '{query}'. Index updated.",
+            "crawled": crawled_urls,  # 👈 New
             "results": results
         })
 
     return jsonify({
         "query": query,
         "status": "Results fetched from existing index.",
+        "crawled": [],
         "results": results
     })
 

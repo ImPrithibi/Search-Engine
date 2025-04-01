@@ -1,31 +1,37 @@
 import React, { useState } from "react";
 
-const SearchBar = ({ onSearch }) => {
+function SearchBar({ onSearch }) {
   const [query, setQuery] = useState("");
 
-  const handleSearch = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    if (query.trim() === "") return;
-    onSearch(query);
+    if (query.trim() !== "") {
+      onSearch(query);
+    }
   };
 
   return (
-    <form onSubmit={handleSearch} className="flex justify-center mt-10">
+    <form onSubmit={handleSubmit} className="flex justify-center mt-10">
       <input
         type="text"
+        placeholder="Search anything..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder="Search something..."
-        className="border border-gray-400 p-2 w-1/2 rounded-l"
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            onSearch(query);
+          }
+        }}
+        className="border p-2 w-1/2 rounded-lg shadow"
       />
       <button
         type="submit"
-        className="bg-blue-500 text-white px-4 rounded-r"
+        className="ml-2 bg-blue-500 text-white p-2 rounded-lg"
       >
         Search
       </button>
     </form>
   );
-};
+}
 
 export default SearchBar;

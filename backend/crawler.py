@@ -58,8 +58,9 @@ def start_crawling(keyword=None):
         to_crawl = list(SEED_URLS)
 
     count = 0
+    crawled_urls = []
 
-    while to_crawl and count < 10:  # Hard limit to 10 pages
+    while to_crawl and count < 10:
         url = to_crawl.pop(0)
         if url in crawled:
             continue
@@ -70,12 +71,23 @@ def start_crawling(keyword=None):
             "url": url,
             "content": text
         }
-        # Do NOT extend to_crawl → we want only the initial search result pages
+        crawled_urls.append(url)
         count += 1
 
+    # Save crawled data
     os.makedirs(DATA_DIR, exist_ok=True)
+
+    # Merge with old data if exists
+    if os.path.exists(PAGES_FILE):
+        with open(PAGES_FILE, "r") as f:
+            old_crawled = json.load(f)
+    else:
+        old_crawled = {}
+
+    old_crawled.update(crawled)
+
     with open(PAGES_FILE, "w") as f:
-        json.dump(crawled, f, indent=2)
+        json.dump(old_crawled, f, indent=2)
 
     print(f"Crawling complete. {len(crawled)} pages saved.")
-    return f"Crawled {len(crawled)} pages."
+    return f"Crawled {len(crawled)} pages.", crawled_urls
