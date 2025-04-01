@@ -13,8 +13,8 @@ INDEX_FILE = os.path.join(DATA_DIR, "index.json")
 
 def tokenize(text):
     """Convert text into list of lowercase words."""
-    tokens = nltk.word_tokenize(text)
-    return [word.lower() for word in tokens if word.isalnum()]
+    tokens = text.lower().split()
+    return [word for word in tokens if word.isalnum()]
 
 
 def build_index():
