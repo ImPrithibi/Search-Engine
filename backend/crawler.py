@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import os
+from duckduckgo_search import DDGS
 
 DATA_DIR = "data"
 PAGES_FILE = os.path.join(DATA_DIR, "pages.json")
@@ -37,13 +38,22 @@ def get_links(url):
         print(f"Error crawling {url}: {e}")
         return [], ""
 
+def get_search_results(keyword, max_results=5):
+    """Search DuckDuckGo and get top URLs."""
+    results = []
+    with DDGS() as ddgs:
+        for r in ddgs.text(keyword, region="wt-wt", safesearch="off", max_results=max_results):
+            results.append(r["href"])
+    return results
+
 def start_crawling(keyword=None):
     crawled = {}
     to_crawl = []
 
     if keyword:
-        query_url = f"https://www.google.com/search?q={keyword}"
-        to_crawl.append(query_url)
+        print(f"Searching web for '{keyword}'...")
+        to_crawl = get_search_results(keyword, max_results=10)
+        print(f"Found {len(to_crawl)} links: {to_crawl}")
     else:
         to_crawl = list(SEED_URLS)
 
