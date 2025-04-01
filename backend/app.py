@@ -23,11 +23,22 @@ def search_endpoint():
 
     if not results:
         print(f"No results found for '{query}'. Crawling now...")
-        crawler.start_crawling(keyword=query)
+        status = crawler.start_crawling(keyword=query)
         indexer.build_index()
         results = search.search_query(query)
 
-    return jsonify({"query": query, "results": results})
+        return jsonify({
+            "query": query,
+            "status": f"Crawled '{query}'. Index updated.",
+            "results": results
+        })
+
+    return jsonify({
+        "query": query,
+        "status": "Results fetched from existing index.",
+        "results": results
+    })
+
 
 # Crawl endpoint
 @app.route('/crawl')
