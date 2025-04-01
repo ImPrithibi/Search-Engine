@@ -1,19 +1,11 @@
 import requests
 from bs4 import BeautifulSoup
-import json
-import os
 from duckduckgo_search import DDGS
-
-DATA_DIR = "data"
-PAGES_FILE = os.path.join(DATA_DIR, "pages.json")
-
-# List of websites you want to crawl
 
 SEED_URLS = [
     "https://www.python.org",
     "https://www.djangoproject.com",
     "https://flask.palletsprojects.com",
-    # Can add more websites here
 ]
 
 MAX_PAGES = 100  # Limit so it doesn't go to infinite
@@ -74,20 +66,5 @@ def start_crawling(keyword=None):
         crawled_urls.append(url)
         count += 1
 
-    # Save crawled data
-    os.makedirs(DATA_DIR, exist_ok=True)
-
-    # Merge with old data if exists
-    if os.path.exists(PAGES_FILE):
-        with open(PAGES_FILE, "r") as f:
-            old_crawled = json.load(f)
-    else:
-        old_crawled = {}
-
-    old_crawled.update(crawled)
-
-    with open(PAGES_FILE, "w") as f:
-        json.dump(old_crawled, f, indent=2)
-
-    print(f"Crawling complete. {len(crawled)} pages saved.")
+    print(f"Crawling complete. {len(crawled)} pages fetched.")
     return f"Crawled {len(crawled)} pages.", crawled_urls
