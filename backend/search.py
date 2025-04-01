@@ -16,13 +16,21 @@ def load_index():
     return index
 
 def search_query(query):
-    """Search for query and return matching URLs."""
+    """Search for query and return matching URLs with basic ranking."""
     index = load_index()
     keywords = query.lower().split()
 
-    result_urls = set()
+    scores = {}
+
     for word in keywords:
         if word in index:
-            result_urls.update(index[word])
+            for url in index[word]:
+                if url not in scores:
+                    scores[url] = 0
+                scores[url] += 1  # +1 score for each matching word
 
-    return list(result_urls)
+    # Sort URLs by score (descending)
+    ranked_results = sorted(scores.items(), key=lambda x: x[1], reverse=True)
+
+    # Return only URLs
+    return [url for url, score in ranked_results]
