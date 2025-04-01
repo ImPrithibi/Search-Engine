@@ -37,10 +37,16 @@ def get_links(url):
         print(f"Error crawling {url}: {e}")
         return [], ""
 
-def start_crawling():
-    """Main crawling function."""
+def start_crawling(keyword=None):
     crawled = {}
-    to_crawl = list(SEED_URLS)
+    to_crawl = []
+
+    if keyword:
+        query_url = f"https://www.google.com/search?q={keyword}"
+        to_crawl.append(query_url)
+    else:
+        to_crawl = list(SEED_URLS)
+
     count = 0
 
     while to_crawl and count < MAX_PAGES:
@@ -57,12 +63,9 @@ def start_crawling():
         to_crawl.extend(links)
         count += 1
 
-    # Save to data/pages.json
-    
     os.makedirs(DATA_DIR, exist_ok=True)
     with open(PAGES_FILE, "w") as f:
         json.dump(crawled, f, indent=2)
 
     print(f"Crawling complete. {len(crawled)} pages saved.")
     return f"Crawled {len(crawled)} pages."
-
