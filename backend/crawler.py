@@ -1,6 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 from duckduckgo_search import DDGS
+from duckduckgo_search.exceptions import RatelimitException
+import time
 
 SEED_URLS = [
     "https://www.python.org",
@@ -30,13 +32,20 @@ def get_links(url):
         print(f"Error crawling {url}: {e}")
         return [], ""
 
-def get_search_results(keyword, max_results=10):
-    from duckduckgo_search import DDGS
 
-    results = []
-    headers = {
-        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36"
-    }
+def get_search_results(keyword, max_results=10):
+    try:
+        with DDGS() as ddgs:
+            results = []
+            for r in ddgs.text(keyword, region="wt-wt", safesearch="off"):
+                results.append(r)
+                if len(results) >= max_results:
+                    break
+            return results
+    except RatelimitException:
+        print("Rate limited. Waiting 10 seconds...")
+        time.sleep(10)
+        return []
 
     with DDGS(headers=headers) as ddgs:
         for r in ddgs.text(keyword, region="wt-wt", safesearch="off"):
