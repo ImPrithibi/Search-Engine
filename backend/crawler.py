@@ -34,12 +34,17 @@ def get_search_results(keyword, max_results=10):
     from duckduckgo_search import DDGS
 
     results = []
-    with DDGS() as ddgs:
+    headers = {
+        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36"
+    }
+
+    with DDGS(headers=headers) as ddgs:
         for r in ddgs.text(keyword, region="wt-wt", safesearch="off"):
             results.append(r)
             if len(results) >= max_results:
                 break
     return results
+
 
 def start_crawling(keyword=None):
     crawled = {}
