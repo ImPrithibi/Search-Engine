@@ -135,7 +135,7 @@ This project is a result of that goal.
 ## 🙌 Credits
 
 Built from scratch by **Prithibi Paul**  
-[https://www.linkedin.com/in/prithibipaul/] | [http://afk.ac/] 
+https://www.linkedin.com/in/prithibipaul/ | http://afk.ac/
 
 ---
 
