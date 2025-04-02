@@ -139,7 +139,7 @@ https://www.linkedin.com/in/prithibipaul/ | http://afk.ac/
 
 ---
 
-## 📌 Next Goals (Optional)
+## 📌 Next Goals
 
 - Add Search History (per session)
 - Add pagination
