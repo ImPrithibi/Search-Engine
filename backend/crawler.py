@@ -32,20 +32,23 @@ def get_links(url):
         print(f"Error crawling {url}: {e}")
         return [], ""
 
-
-def get_search_results(keyword, max_results=10):
-    try:
-        with DDGS() as ddgs:
-            results = []
-            for r in ddgs.text(keyword, region="wt-wt", safesearch="off"):
-                results.append(r)
-                if len(results) >= max_results:
-                    break
-            return results
-    except RatelimitException:
-        print("Rate limited. Waiting 10 seconds...")
-        time.sleep(10)
-        return []
+def get_search_results(keyword, max_results=10, retries=3):
+    attempt = 0
+    while attempt < retries:
+        try:
+            with DDGS() as ddgs:
+                results = []
+                for r in ddgs.text(keyword, region="wt-wt", safesearch="off"):
+                    results.append(r)
+                    if len(results) >= max_results:
+                        break
+                return results
+        except RatelimitException:
+            wait_time = (attempt + 1) * 10
+            print(f"Rate limited. Waiting {wait_time} seconds before retrying...")
+            time.sleep(wait_time)
+            attempt += 1
+    return []
 
     with DDGS(headers=headers) as ddgs:
         for r in ddgs.text(keyword, region="wt-wt", safesearch="off"):
