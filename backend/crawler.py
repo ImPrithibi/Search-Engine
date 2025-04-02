@@ -58,33 +58,22 @@ def get_search_results(keyword, max_results=10, retries=3):
     return results
 
 
-def start_crawling(keyword=None):
-    crawled = {}
-    to_crawl = []
+def start_crawling(keyword):
+    print(f"Searching web for '{keyword}'...")
 
-    if keyword:
-        print(f"Searching web for '{keyword}'...")
-        to_crawl = get_search_results(keyword, max_results=10)
-        print(f"Found {len(to_crawl)} links: {to_crawl}")
-    else:
-        to_crawl = list(SEED_URLS)
+    to_crawl = get_search_results(keyword, max_results=10)
+    crawled = set()  # ← Add this here
 
-    count = 0
     crawled_urls = []
 
-    while to_crawl and count < 10:
-        url = to_crawl.pop(0)
-        if url in crawled:
+    for url in to_crawl:
+        if url["href"] in crawled:
             continue
+        crawled.add(url["href"])  # ← And add this here
 
-        print(f"Crawling: {url}")
-        links, text = get_links(url)
-        crawled[url] = {
-            "url": url,
-            "content": text
-        }
-        crawled_urls.append(url)
-        count += 1
+        print(f"Fetched: {url['href']}")
+        crawled_urls.append(url["href"])
 
-    print(f"Crawling complete. {len(crawled)} pages fetched.")
-    return f"Crawled {len(crawled)} pages.", crawled_urls
+    print(f"Crawling complete. {len(crawled_urls)} pages fetched.")
+    return "Crawling complete", crawled_urls
+
