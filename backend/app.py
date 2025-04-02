@@ -9,22 +9,18 @@ CORS(app)
 def home():
     return jsonify({"message": "Search Engine Backend is running!"})
 
-@app.route('/search')
+@app.route("/search", methods=["GET"])
 def search_endpoint():
-    query = request.args.get('q')
+    query = request.args.get("q")
     if not query:
         return jsonify({"error": "No query provided"}), 400
 
-    # Always crawl fresh
-    print(f"Searching web for '{query}'...")
     status, crawled_urls = crawler.start_crawling(keyword=query)
+    if not crawled_urls:
+        return jsonify({"error": "Rate limited, try again later."}), 429
 
-    return jsonify({
-        "query": query,
-        "status": "Crawling done. Showing fresh results.",
-        "crawled": crawled_urls,
-        "results": crawled_urls
-    })
+    return jsonify({"status": status, "results": crawled_urls})
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
