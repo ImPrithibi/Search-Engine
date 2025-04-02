@@ -12,7 +12,7 @@ function App() {
     setResults([]);
 
     try {
-      const response = await axios.get(`http://127.0.0.1:5001/search?q=${query}`);
+      const response = await axios.get(`/api/search?q=${query}`);
       
       if (response.data.crawled && response.data.crawled.length > 0) {
         setMessage(`Searching done. Found these fresh pages for '${query}'`);
