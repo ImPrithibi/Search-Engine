@@ -2,6 +2,6 @@ Flask
 flask-cors
 beautifulsoup4
 requests
-duckduckgo-search
+duckduckgo-search==3.8
 gunicorn
 nltk
