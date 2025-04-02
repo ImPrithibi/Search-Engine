@@ -15,7 +15,7 @@ function App() {
       const response = await axios.get(`http://127.0.0.1:5001/search?q=${query}`);
       
       if (response.data.crawled && response.data.crawled.length > 0) {
-        setMessage(`Crawling done. Found these fresh pages for '${query}'`);
+        setMessage(`Searching done. Found these fresh pages for '${query}'`);
         setResults(response.data.crawled);
       } else if (response.data.results && response.data.results.length > 0) {
         setMessage(`Results fetched from index for '${query}'`);
