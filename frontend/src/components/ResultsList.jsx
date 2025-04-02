@@ -1,5 +1,3 @@
-import React from "react";
-
 const ResultsList = ({ results }) => {
   if (!results || results.length === 0) {
     return <p className="text-center mt-5">No results found.</p>;
