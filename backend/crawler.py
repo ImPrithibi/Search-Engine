@@ -30,12 +30,15 @@ def get_links(url):
         print(f"Error crawling {url}: {e}")
         return [], ""
 
-def get_search_results(keyword, max_results=5):
-    """Search DuckDuckGo and get top URLs."""
+def get_search_results(keyword, max_results=10):
+    from duckduckgo_search import DDGS
+
     results = []
     with DDGS() as ddgs:
-        for r in ddgs.text(keyword, region="wt-wt", safesearch="off", max_results=max_results):
-            results.append(r["href"])
+        for r in ddgs.text(keyword, region="wt-wt", safesearch="off"):
+            results.append(r)
+            if len(results) >= max_results:
+                break
     return results
 
 def start_crawling(keyword=None):
